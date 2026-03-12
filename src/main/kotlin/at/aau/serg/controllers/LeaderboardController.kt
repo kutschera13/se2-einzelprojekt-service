@@ -18,19 +18,19 @@ class LeaderboardController(
     fun getLeaderboard(
         @RequestParam(required = false) rank: Int?
     ): ResponseEntity<List<GameResult>> {
-        val sorted = gameResultService.getGameResults()
-            .sortedWith(compareBy({ -it.score }, { it.timeInSeconds }))
+        val sorted = gameResultService.getGameResults()  //unsortiere Liste wird hintergegeben
+            .sortedWith(compareBy({ -it.score }, { it.timeInSeconds })) // Liste wird hier sortiert
 
         if (rank == null) {
             return ResponseEntity.ok(sorted)
         }
 
-        // rank is 1-based; validate range --> does it make sense?!
+        //Validiert den Rank Parameter
         if (rank < 1 || rank > sorted.size) {
             return ResponseEntity.badRequest().build()
         }
 
-        val index = rank - 1  // convert to 0-based index
+        val index = rank - 1  // rechnet von 1-based auf 0-based (Array) um
 
         val fromIndex = maxOf(0, index - 3)
         val toIndex   = minOf(sorted.size - 1, index + 3)

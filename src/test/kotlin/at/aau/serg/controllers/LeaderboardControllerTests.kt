@@ -2,6 +2,7 @@ package at.aau.serg.controllers
 
 import at.aau.serg.models.GameResult
 import at.aau.serg.services.GameResultService
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
@@ -75,6 +76,19 @@ class LeaderboardControllerTests {
 
         whenever(mockedService.getGameResults()).thenReturn(results)
         assertEquals(4, controller.getLeaderboard(10).body?.size)
+    }
+
+    @Test
+    fun test_getLeaderboard_rankWindow_containsCorrectEntries(){
+        val first = GameResult(1, "first", 20, 20.0)
+        val second = GameResult(2, "second", 15, 10.0)
+        val third = GameResult(3, "third", 10, 15.0)
+
+        whenever(mockedService.getGameResults()).thenReturn(listOf(first, second, third))
+
+        val body= controller.getLeaderboard(2).body.orEmpty()
+        assertTrue(body.contains(second))
+
     }
 
 }
