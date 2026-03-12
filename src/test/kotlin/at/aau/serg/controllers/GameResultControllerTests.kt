@@ -70,4 +70,26 @@ class GameResultControllerTests {
         assertNull(result)
     }
 
+    // Testet: addGameResult() ruft den Service mit dem richtigen Objekt auf
+    @Test
+    fun test_addGameResult_callsService() {
+        val gameResult = GameResult(1L, "player1", 100, 5.0)
+
+        controller.addGameResult(gameResult)
+
+        // addGameResult hat keinen Rückgabewert → nur prüfen ob Service aufgerufen wurde
+        verify(mockedService).addGameResult(gameResult)
+    }
+
+
+    // Testet: deleteGameResult() ruft den Service mit der richtigen ID auf
+    @Test
+    fun test_deleteGameResult_callsService() {
+        controller.deleteGameResult(1L)
+
+        // deleteGameResult hat keinen Rückgabewert → nur prüfen ob Service aufgerufen wurde
+        verify(mockedService).deleteGameResult(1L)
+    }
+
+
 }
