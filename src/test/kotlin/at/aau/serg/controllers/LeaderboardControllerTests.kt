@@ -53,4 +53,13 @@ class LeaderboardControllerTests {
         assertEquals(third, res[1])
         assertEquals(first, res[2])
     }
+
+    @Test
+    fun test_getLeaderboad_invalidRank_returnsBadRequest() {
+        whenever(mockedService.getGameResults()).thenReturn(listOf(GameResult(1, "first", 20, 20.0)))
+
+        assertEquals(400, controller.getLeaderboard(0).statusCode.value())
+        assertEquals(400,controller.getLeaderboard(-1).statusCode.value())
+        assertEquals(400,controller.getLeaderboard(2).statusCode.value())
+    }
 }
