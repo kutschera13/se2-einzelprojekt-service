@@ -62,4 +62,19 @@ class LeaderboardControllerTests {
         assertEquals(400,controller.getLeaderboard(-1).statusCode.value())
         assertEquals(400,controller.getLeaderboard(2).statusCode.value())
     }
+
+    @Test
+    fun test_getLeaderboard_rankWindow_clampedCorrectly() {
+        val results = (1..10).map { GameResult(it.toLong(), "player$it", 100 - it, it.toDouble()) }
+
+        whenever(mockedService.getGameResults()).thenReturn(results)
+        assertEquals(4, controller.getLeaderboard(1).body?.size)
+
+        whenever(mockedService.getGameResults()).thenReturn(results)
+        assertEquals(7, controller.getLeaderboard(5).body?.size)
+
+        whenever(mockedService.getGameResults()).thenReturn(results)
+        assertEquals(4, controller.getLeaderboard(10).body?.size)
+    }
+
 }
